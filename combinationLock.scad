@@ -76,8 +76,9 @@ module combinationLockRings(){
     }
 }
 
-combinationLockSupport();
-
-translate([((3/2)/2),-1,0]){
-    combinationLockRings();
+module combinationLock(){
+    combinationLockSupport();
+    translate([((3/2)/2),-1,0]){
+        combinationLockRings();
+    }
 }
