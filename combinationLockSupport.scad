@@ -1,5 +1,3 @@
-include <combinationRing.scad>
-
 module combinationLockSupportPart(
     supportWidth,
     supportLength,
@@ -19,15 +17,16 @@ module combinationLockSupportPart(
     }
 }
 
-module combinationLockSupport(){
-    union(){
-        extraSpacing = 0.1;
-        ringCount = 5;
-        ringDiameter = 5;
-        supportWidth = 3;
-        ringHeight = 0.5;
-        mainColumnsWidth = 0.5;
-        supportLength = 6;        
+module combinationLockSupport(
+    extraSpacing,
+    ringCount,
+    ringDiameter,
+    supportWidth,
+    ringHeight,
+    mainColumnsWidth,
+    supportLength
+){
+    union(){   
         
         wholeRingPlusExtraSupport = ringDiameter + (ringDiameter *0.3);
         supportSectionHeight = ringHeight;
@@ -50,35 +49,36 @@ module combinationLockSupport(){
         translate([peekHoleSpace,0,0]){
             cube([wholeRingPlusExtraSupport-peekHoleSpace,supportWidth,supportSectionHeight]);
         }
+        translate([peekHoleSpace,0,-(supportSectionHeight+extraSpacing)]){
+            cube([mainColumnsWidth,supportWidth,supportSectionHeight+extraSpacing]);
+        }
     } 
 }
 
-module combinationLockRings(){
-    
-    /*
-    never use 90 or the puzzle breaks because there will
-    be a hole where a symbol was supposed to be
-    */
-    holeAngles = [90,180,30,180,270];
-    for(i=[1:5]) {
-        translate([0,0,(-i*(0.6+0.5))+0.55]){
-            combinationRing(
-                hasAHole = (i != 5),
-                holeAngle = holeAngles[i-1],
-                ringDiameter = 5,
-                ringHeight = 0.5,
-                centralHoleDiameter = 1,
-                lockApertureWidth = 0.5,
-                lockApertureDeepness = 0.5,
-                peekHoleDiameter = 1
-            );
-        }
-    }
-}
+/*
+extraSpacing = 0.1;
 
-module combinationLock(){
-    combinationLockSupport();
-    translate([((3/2)/2),-1,0]){
-        combinationLockRings();
-    }
-}
+ringCount = 6;
+ringDiameter = 5;
+ringHeight = 0.5;
+
+supportWidth = 3;
+supportLength = 6;   
+
+mainColumnsWidth = 0.5;
+
+centralHoleDiameter = 1;
+lockApertureWidth = 0.5;
+lockApertureDeepness = 0.5;
+peekHoleDiameter = 1;
+
+combinationLockSupport(
+    extraSpacing,
+    ringCount,
+    ringDiameter,
+    supportWidth,
+    ringHeight,
+    mainColumnsWidth,
+    supportLength
+);
+*/
