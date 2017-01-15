@@ -8,7 +8,6 @@ module combinationRing(
     lockApertureDeepness,
     peekHoleDiameter
 ){        
-    echo(holeAngle);
     ringRadius = ringDiameter/2;
     centralHoleRadius = centralHoleDiameter/2;
     translate([ringRadius,ringRadius,0]){
@@ -23,7 +22,7 @@ module combinationRing(
             }
             if(hasAHole){
                 rotate([0,0,holeAngle]){
-                    translate([0,centralHoleRadius + lockApertureDeepness + (peekHoleDiameter/2) ,-0.5]){
+                    translate([0, ringRadius - peekHoleDiameter,-0.5]){
                         cylinder(d=peekHoleDiameter, h=10, $fs=0.1);
                     }
                 }
@@ -36,7 +35,7 @@ module combinationRing(
 combinationRing(
     hasAHole = true,
     holeAngle = 90,
-    ringDiameter = 5,
+    ringDiameter = 15,
     ringHeight = 0.5,
     centralHoleDiameter = 1,
     lockApertureWidth = 0.5,

@@ -1,18 +1,17 @@
 module combinationLockSupportPart(
     supportWidth,
     supportLength,
-    supportHeight
+    supportHeight,
+    mainColumnsWidth,
+    peekHoleDiameter
 ){
     difference(){
         insideAppertureRadius = supportWidth/2;
         
         cube([supportLength,supportWidth, supportHeight]);
-        insideAppertureOffset = (supportWidth-insideAppertureRadius)/2;
-        translate([insideAppertureOffset, insideAppertureOffset,0]){
-            cube([supportLength,insideAppertureRadius,10]);
-        }
-        translate([insideAppertureOffset*2, insideAppertureOffset,0]){
-            cube([insideAppertureRadius,insideAppertureRadius,10]);
+        
+        translate([mainColumnsWidth, (supportWidth/2) - (peekHoleDiameter/2),0]){
+            cube([supportLength,peekHoleDiameter,10]);
         }
     }
 }
@@ -21,49 +20,55 @@ module combinationLockSupport(
     extraSpacing,
     ringCount,
     ringDiameter,
-    supportWidth,
     ringHeight,
-    mainColumnsWidth,
-    supportLength
+    peekHoleDiameter,
+    mainColumnsWidth
 ){
+    supportWidth = ringDiameter*0.6;
     union(){   
         
         wholeRingPlusExtraSupport = ringDiameter + (ringDiameter *0.3);
         supportSectionHeight = ringHeight;
         supportPlusSpace = ringHeight+supportSectionHeight+extraSpacing;
         
-        peekHoleSpace = (ringDiameter/2) ;
-        
         for(i=[0:ringCount]) {
             translate([0,0,-i*supportPlusSpace]){
-                combinationLockSupportPart(supportWidth, wholeRingPlusExtraSupport , supportSectionHeight);
+                combinationLockSupportPart(
+                    supportWidth, 
+                    wholeRingPlusExtraSupport , 
+                    supportSectionHeight, 
+                    mainColumnsWidth, 
+                    peekHoleDiameter
+                );
             }
         }
+        //main Wall Left Column
         mainWallHeight = ringCount*supportPlusSpace;
         translate([0,0, -mainWallHeight ]){
-            cube([((supportWidth/2)/2),mainColumnsWidth,mainWallHeight]);
+            cube([mainColumnsWidth,mainColumnsWidth,mainWallHeight]);
         }
+        //main Wall Right Column
         translate([0, supportWidth-mainColumnsWidth, -mainWallHeight ]){//light to see symbols
-            cube([((supportWidth/2)/2),mainColumnsWidth,mainWallHeight]);
+            cube([mainColumnsWidth,mainColumnsWidth,mainWallHeight]);
         }
-        translate([peekHoleSpace,0,0]){
-            cube([wholeRingPlusExtraSupport-peekHoleSpace,supportWidth,supportSectionHeight]);
+        //Upper lid
+        translate([peekHoleDiameter*2+mainColumnsWidth,0,0]){
+            cube([wholeRingPlusExtraSupport-peekHoleDiameter*2- mainColumnsWidth,supportWidth,supportSectionHeight]);
         }
+        //Internal wall to hide center hole
         translate([peekHoleSpace,0,-(supportSectionHeight+extraSpacing)]){
-            cube([mainColumnsWidth,supportWidth,supportSectionHeight+extraSpacing]);
+           cube([0.1,supportWidth,supportSectionHeight+extraSpacing]);
         }
     } 
 }
+
 
 /*
 extraSpacing = 0.1;
 
 ringCount = 6;
-ringDiameter = 5;
+ringDiameter = 15;
 ringHeight = 0.5;
-
-supportWidth = 3;
-supportLength = 6;   
 
 mainColumnsWidth = 0.5;
 
@@ -76,9 +81,8 @@ combinationLockSupport(
     extraSpacing,
     ringCount,
     ringDiameter,
-    supportWidth,
     ringHeight,
-    mainColumnsWidth,
-    supportLength
+    1,
+    mainColumnsWidth
 );
 */

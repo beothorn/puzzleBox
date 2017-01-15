@@ -1,14 +1,12 @@
-include <combinationLockSupport.scad>
-include <combinationLockRings.scad>
+use <combinationlock/combinationLockSupport.scad>
+use <combinationlock/combinationLockRings.scad>
+use <combinationlock/centralPart.scad>
 
 extraSpacing = 0.1;
 
 ringCount = 5;
 ringDiameter = 5;
 ringHeight = 0.5;
-
-supportWidth = 3;
-supportLength = 6;   
 
 mainColumnsWidth = 0.5;
 
@@ -21,16 +19,18 @@ combinationLockSupport(
     extraSpacing,
     ringCount+1,
     ringDiameter,
-    supportWidth,
     ringHeight,
-    mainColumnsWidth,
-    supportLength
+    peekHoleDiameter,
+    mainColumnsWidth
 );
 
-translate([((supportWidth/2)/2),-1,-(ringHeight*2+extraSpacing)]){
+suportWidth = ringDiameter* 0.6;
+translate([mainColumnsWidth, (-(ringDiameter/2))+(suportWidth/2)  ,-(ringHeight*2+extraSpacing)]){
     combinationLockRings(
+        ringCount,
         ringDiameter,
         ringHeight,
+        extraSpacing,
         centralHoleDiameter,
         lockApertureWidth,
         lockApertureDeepness,
